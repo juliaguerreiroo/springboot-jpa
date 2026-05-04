@@ -1,9 +1,7 @@
 package com.julia.course.services;
 
 import com.julia.course.entities.Order;
-import com.julia.course.entities.User;
 import com.julia.course.repositories.OrderRepository;
-import com.julia.course.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
