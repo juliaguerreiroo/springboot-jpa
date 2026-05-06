@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name =  "tb_order")
@@ -23,6 +25,12 @@ public class Order implements Serializable {
     @JoinColumn(name="client_id")
     private User client;
     private Integer orderStatus;
+
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
+
+    @OneToOne(mappedBy = "order",  cascade = CascadeType.ALL)
+    private Payment payment;
 
     public Order() {
     }
@@ -58,12 +66,32 @@ public class Order implements Serializable {
         this.id = id;
     }
 
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
     public OrderStatus getOrderStatus() {
         return OrderStatus.valueOf(orderStatus);
     }
 
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus.getCode();
+    }
+
+    public Set<OrderItem> getItems() {
+        return items;
+    }
+
+    public Double getTotal(){
+        double total = 0;
+        for(OrderItem orderItem : items){
+            total += orderItem.getSubTotal();
+        }
+        return total;
     }
 
     @Override
@@ -77,4 +105,6 @@ public class Order implements Serializable {
     public int hashCode() {
         return Objects.hashCode(getId());
     }
+
+
 }
